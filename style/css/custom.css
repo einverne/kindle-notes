@@ -9,6 +9,9 @@ body {
 }
 
 body{ font-size:16px;font-family:'PingFangSC-Regular','Hiragino Sans GB','Microsoft Yahei',sans-serif;}
+.glyphicon {
+    margin-right: 0.5em;
+}
 .panel-body > p + p{ margin: 20px 0 0; }
 .well p{ margin:10px 0 0; }
 .nav{ margin-bottom:20px; }
