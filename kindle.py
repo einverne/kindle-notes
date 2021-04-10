@@ -110,6 +110,10 @@ def getMark(s):
         return "empty content"
 
 
+def normalize_book_name(orgin_name):
+    return changechar(orgin_name)[0:80]
+
+
 def main(source_name='source.txt'):
 
     # 分割函数实现利用关键词进行简单的分割成列表
@@ -128,17 +132,27 @@ def main(source_name='source.txt'):
     sum = clips.__len__()
 
     # 获取书名存储为列表books，获取除书名外的内容为sentence
-    both = []  #完整内容。格式为[['',''],['','']……]
+    book_to_sentence_set = dict()   # map book_name -> list
     books = [] #书名列表
     sentence = []  #标注内容
     for i in range(0,sum):
         book = clips[i].split("\n-")
-        both.append(book)
-        #print(book)
+        if len(book) < 2:
+            continue
+        normalized_name = normalize_book_name(book[0])
+        book_sentence_set_exist = book_to_sentence_set.get(normalized_name)
+        if not book_sentence_set_exist:
+            book_to_sentence_set[normalized_name] = list()
+            book_to_sentence_set[normalized_name].append(book[1])
+        else:
+            if book[1] not in book_sentence_set_exist:
+                book_sentence_set_exist.append(book[1])
         if book != ['']: # 如果书名非空
-            books.append(changechar(book[0])) #添加书名，替换特殊字符，以便创建文件
-            sentence.append(book[1])          #添加笔记
-    print('笔记总数：',sentence.__len__())
+            books.append(normalized_name) # 添加书名，替换特殊字符，以便创建文件
+            sentence.append(book[1])          # 添加笔记
+    print('各本书笔记数：')
+    for book in book_to_sentence_set:
+        print(f'{book} 笔记数：{book_to_sentence_set.get(book).__len__()}')
 
     # 去除书名列表中的重复元素
     nameOfBooks = list(set(books))
@@ -173,23 +187,20 @@ def main(source_name='source.txt'):
     # 向文件添加标注内容
     stce_succ_cnt = 0  # 向html文件添加笔记成功次数
     stce_fail_cnt = 0  # 向html文件添加笔记失败次数
-    # print("html name:",os.listdir())
-    file_list = os.listdir(".") # 获取当前目录文件名，存放于file_list
-    for j in range(0,sentence.__len__()):
-        temp = both[j]
-        filename = changechar(temp[0][0:80])
-        if (filename+".html" in file_list ): # 检索字典
-            s1 = getAddr(temp[1])  # 获取标注位置
-            s2 = getTime(temp[1])  # 获取标注时间
-            s3 = getMark(temp[1])  # 获取标注内容
-            f = open(filename+".html",'a',encoding='utf-8') # 打开对应的文件
-            if (s3 != '\n'):       # 如果文本内容非空
+    for book_name in book_to_sentence_set:
+        sentence_set = book_to_sentence_set.get(book_name)
+        for sentence in sentence_set:
+            s1 = getAddr(sentence)
+            s2 = getTime(sentence)
+            s3 = getMark(sentence)
+            f = open(book_name+'.html', 'a', encoding='utf-8')
+            if s3 != '\n':
                 stce_succ_cnt += 1
-                cnt_temp = stceOfBookCnt[filename]
-                stceOfBookCnt[filename] = cnt_temp+1
-                f.write(SENTENCE_CONTENT.replace("SENTENCE_TXT",s3)
-                        .replace("SENTENCE_TIME",s2)
-                        .replace("SENTENCE_ADDR",s1))
+                cnt_temp = stceOfBookCnt[book_name]
+                stceOfBookCnt[book_name] = cnt_temp + 1
+                f.write(SENTENCE_CONTENT.replace("SENTENCE_TXT", s3)
+                        .replace("SENTENCE_TIME", s2)
+                        .replace("SENTENCE_ADDR", s1))
             else:
                 stce_fail_cnt += 1
             f.close()
