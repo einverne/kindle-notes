@@ -1,16 +1,14 @@
-#coding=utf-8
+# coding=utf-8
 import argparse
-import re
-import os,os.path
+import os
+import os.path
 import shutil
-import random
-import string
 import time
 
-BOUNDARY = u"==========\n" #分隔符
+BOUNDARY = u"==========\n"  # 分隔符
 intab = " \/:*?\"<>|"
-outtab = "---：-？-《》-"     #用于替换特殊字符
-#trantab = maketrans(intab, outtab)
+outtab = "---：-？-《》-"  # 用于替换特殊字符
+# trantab = maketrans(intab, outtab)
 
 HTML_HEAD = '''<!DOCTYPE html>
 <html>
@@ -85,20 +83,24 @@ FOOTER_CONTENT = '''
 </html>
 '''
 
+
 # 替换不能用作文件名的字符
 def changechar(s):
-    s=s.strip()
-    return s.translate(str.maketrans(intab,outtab))
+    s = s.strip()
+    return s.translate(str.maketrans(intab, outtab))
+
 
 # 获取标注位置
 def getAddr(s):
     g = s.split(" | ")[0]
     return g
 
+
 # 获取添加时间
 def getTime(s):
     g = s.split(" | ")[1]
     return g.split("\n\n")[0]
+
 
 # 获取标注内容
 def getMark(s):
@@ -106,7 +108,7 @@ def getMark(s):
     try:
         return g.split("\n\n")[1]
     except IndexError:
-        #print("list index out of range due to empty content")
+        # print("list index out of range due to empty content")
         return "empty content"
 
 
@@ -115,7 +117,6 @@ def normalize_book_name(orgin_name):
 
 
 def main(source_name='source.txt'):
-
     # 分割函数实现利用关键词进行简单的分割成列表
     # 结果为每一条单独的笔记，包含书名，时间，位置和内容
     f = open(source_name, "r", encoding='utf-8')
@@ -128,14 +129,14 @@ def main(source_name='source.txt'):
     clips = content.split(BOUNDARY)
 
     # 获取列表的个数
-    print("列表个数：",clips.__len__())
+    print("列表个数：", clips.__len__())
     sum = clips.__len__()
 
     # 获取书名存储为列表books，获取除书名外的内容为sentence
-    book_to_sentence_set = dict()   # map book_name -> list
-    books = [] #书名列表
-    sentence = []  #标注内容
-    for i in range(0,sum):
+    book_to_sentence_set = dict()  # map book_name -> list
+    books = []  # 书名列表
+    sentence = []  # 标注内容
+    for i in range(0, sum):
         book = clips[i].split("\n-")
         if len(book) < 2:
             continue
@@ -147,9 +148,9 @@ def main(source_name='source.txt'):
         else:
             if book[1] not in book_sentence_set_exist:
                 book_sentence_set_exist.append(book[1])
-        if book != ['']: # 如果书名非空
-            books.append(normalized_name) # 添加书名，替换特殊字符，以便创建文件
-            sentence.append(book[1])          # 添加笔记
+        if book != ['']:  # 如果书名非空
+            books.append(normalized_name)  # 添加书名，替换特殊字符，以便创建文件
+            sentence.append(book[1])  # 添加笔记
     print('各本书笔记数：')
     for book in book_to_sentence_set:
         print(f'{book} 笔记数：{book_to_sentence_set.get(book).__len__()}')
@@ -157,32 +158,32 @@ def main(source_name='source.txt'):
     # 去除书名列表中的重复元素
     nameOfBooks = list(set(books))
     nameOfBooks.sort(key=books.index)
-    print('书籍总数：',nameOfBooks.__len__())
+    print('书籍总数：', nameOfBooks.__len__())
 
     # 根据不同书名建立网页文件
-    stceOfBookCnt = {}   # 记录每本书有几条标注的字典
+    stceOfBookCnt = {}  # 记录每本书有几条标注的字典
     # print(os.listdir())
-    if os.path.exists('books'):
-        shutil.rmtree('books')
-    os.mkdir('books') #创建一个books目录，用于存放书名网页文件
+    if os.path.exists('build/books'):
+        shutil.rmtree('build/books')
+    os.mkdir('build/books')  # 创建一个books目录，用于存放书名网页文件
     # print(os.listdir())
-    os.chdir('books') #更改工作目录
-    for j in range(0,nameOfBooks.__len__()):
+    os.chdir('build/books')  # 更改工作目录
+    for j in range(0, nameOfBooks.__len__()):
 
         # 网页文件的字符长度不能太长，以免无法在linux下创建
         if nameOfBooks[j].__len__() > 80:
-            #print(nameOfBooks[j],"_len:",nameOfBooks[j].__len__())
-            #print(nameOfBooks[j][0:90]+".html")
+            # print(nameOfBooks[j],"_len:",nameOfBooks[j].__len__())
+            # print(nameOfBooks[j][0:90]+".html")
             nameOfBooks[j] = nameOfBooks[j][0:80]  # 截取字符串
 
-        f = open(nameOfBooks[j]+".html",'w',encoding='utf-8') # 创建网页文件
-        f.write(HTML_HEAD.format(book_title=nameOfBooks[j]))   # 写入html头文件
-        #s = nameOfBooks[j]
+        f = open(nameOfBooks[j] + ".html", 'w', encoding='utf-8')  # 创建网页文件
+        f.write(HTML_HEAD.format(book_title=nameOfBooks[j]))  # 写入html头文件
+        # s = nameOfBooks[j]
         f.write(BOOK_TITLE.format(book_name=nameOfBooks[j]))
         f.write(BACK_HOME)
 
         f.close()
-        stceOfBookCnt.__setitem__(nameOfBooks[j],0)  # 清零每本书的标注数量
+        stceOfBookCnt.__setitem__(nameOfBooks[j], 0)  # 清零每本书的标注数量
 
     # 向文件添加标注内容
     stce_succ_cnt = 0  # 向html文件添加笔记成功次数
@@ -193,7 +194,7 @@ def main(source_name='source.txt'):
             s1 = getAddr(sentence)
             s2 = getTime(sentence)
             s3 = getMark(sentence)
-            f = open(book_name+'.html', 'a', encoding='utf-8')
+            f = open(book_name + '.html', 'a', encoding='utf-8')
             if s3 != '\n':
                 stce_succ_cnt += 1
                 cnt_temp = stceOfBookCnt[book_name]
@@ -206,49 +207,50 @@ def main(source_name='source.txt'):
             f.close()
 
     # 向文件添加脚标
-    file_list = os.listdir(".") #获取当前目录文件名，存放于file_list
+    file_list = os.listdir(".")  # 获取当前目录文件名，存放于file_list
     html_count = file_list.__len__()
-    for i in range(0,file_list.__len__()):
-        f = open(file_list[i],'a',encoding='utf-8')
+    for i in range(0, file_list.__len__()):
+        f = open(file_list[i], 'a', encoding='utf-8')
         f.write(BACK_HOME)
         f.write(FOOTER_CONTENT)
         f.close()
 
     # 处理index.html
     os.chdir("../")
-    f=open("index.html",'w',encoding='utf-8')
+    f = open("index.html", 'w', encoding='utf-8')
 
     # 写入html头内容
-    f.write(HTML_HEAD.format(book_title='首页').replace("../",""))
+    f.write(HTML_HEAD.format(book_title='首页').replace("../", ""))
 
     # 写入书的数量和标注的总数
-    f.write(INDEX_TITLE.replace("SENTENCE_SUM",str(sentence.__len__()))
-            .replace("UPDATE",time.strftime("%Y-%m-%d %H:%M", time.localtime()))
-            .replace("BOOKS_SUM",str(nameOfBooks.__len__())))
+    f.write(INDEX_TITLE.replace("SENTENCE_SUM", str(sentence.__len__()))
+            .replace("UPDATE", time.strftime("%Y-%m-%d %H:%M", time.localtime()))
+            .replace("BOOKS_SUM", str(nameOfBooks.__len__())))
 
     # 根据标注数量对书籍列表进行排序
     book_list = []
-    for i in range(0,html_count):
-        html_url = "books/"+file_list[i]
-        html_name = file_list[i].replace(".html",'')
-        book_item = [html_url,html_name,int(stceOfBookCnt[html_name])]
+    for i in range(0, html_count):
+        html_url = "books/" + file_list[i]
+        html_name = file_list[i].replace(".html", '')
+        book_item = [html_url, html_name, int(stceOfBookCnt[html_name])]
         book_list.append(book_item)
     book_list.sort(key=lambda x: x[2], reverse=True)
 
     # 写入书籍列表以及每本书的标注数量
-    for i in range(0,html_count - 1):
+    for i in range(0, html_count - 1):
         url = book_list[i][0]
         name = book_list[i][1]
         num = book_list[i][2]
-        f.write(ITEM_CONTENT.replace("HTML_URL",url)
-                .replace("HTML_FILE_NAME",name)
-                .replace("SENTENCE_COUNT",str(num)))
+        f.write(ITEM_CONTENT.replace("HTML_URL", url)
+                .replace("HTML_FILE_NAME", name)
+                .replace("SENTENCE_COUNT", str(num)))
     f.write(FOOTER_CONTENT)
     f.close()
 
 
 if __name__ == '__main__':
     cli_parser = argparse.ArgumentParser(description="Parse kindle My Clippings.txt and generate html")
-    cli_parser.add_argument('--filename', metavar='filename', type=str, default='source.txt', required=False, help='My Clippings.txt file name, default is source.txt')
+    cli_parser.add_argument('--filename', metavar='filename', type=str, default='source.txt', required=False,
+                            help='My Clippings.txt file name, default is source.txt')
     args = cli_parser.parse_args()
     main(args.filename)
