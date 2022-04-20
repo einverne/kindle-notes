@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import time
 from pathlib import Path
 
@@ -19,9 +20,9 @@ class MoonReader:
 
     def writefile(self, file_lines):
         # write file
-        newfile = open(Path(self.filename).stem + '.md', mode='w', encoding='UTF-8')
-        newfile.writelines(file_lines)
-        newfile.close()
+        path = os.path.join('docs', Path(self.filename).stem) + '.md'
+        with open(path, 'w', encoding='UTF-8') as newfile:
+            newfile.writelines(file_lines)
 
     def convert(self):
         # readfile
