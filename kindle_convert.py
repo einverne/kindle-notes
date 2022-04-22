@@ -109,7 +109,7 @@ class Kindle(AbstractConvert):
                 s3 = get_mark(sentence)
                 if s3 != '\n':
                     f.writelines('> ' + s3 + '\n')
-                    f.writelines('**' + s1 + '**' + ' **' + s2 + '**\n\n---\n\n')
+                    f.writelines(s1 + '' + s2 + '\n\n---\n\n')
             f.close()
 
 
