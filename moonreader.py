@@ -1,28 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
 import time
 from pathlib import Path
 
+from converter import AbstractConvert
 
-class MoonReader:
 
-    def __init__(self, filename) -> None:
-        self.filename = filename
-
-    def readfile(self):
-        # readfile
-        with open(self.filename, mode='r', encoding='UTF-8') as file:
-            file_lines = file.readlines()
-        for i in range(len(file_lines)):
-            file_lines[i] = file_lines[i].rstrip()
-        return file_lines
-
-    def writefile(self, file_lines):
-        # write file
-        path = os.path.join('docs', Path(self.filename).stem) + '.md'
-        with open(path, 'w', encoding='UTF-8') as newfile:
-            newfile.writelines(file_lines)
+class MoonReader(AbstractConvert):
 
     def convert(self):
         # readfile
@@ -44,7 +28,7 @@ class MoonReader:
             content.append('---')
         content.append('\n')
         # write file
-        self.writefile(content)
+        self.writefile('docs/moonreader', content)
 
     def write(self):
         self.convert()
