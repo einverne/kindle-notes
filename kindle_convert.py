@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import re
 
 from converter import AbstractConvert
 
 BOUNDARY = u"==========\n"  # 分隔符
-intab = " \/:*?\"<>|"
-outtab = "---：-？-《》-"  # 用于替换特殊字符
+intab = " \/::*?\"<>|"
+outtab = "------？-《》-"  # 用于替换特殊字符
 
 
 # 替换不能用作文件名的字符
@@ -17,6 +18,22 @@ def change_char(s):
 
 def normalize_book_name(origin_name):
     return change_char(origin_name)[0:80]
+
+
+def make_file_name(s):
+    s = s.strip()
+    s = s.replace("！", '')
+    s = s.replace("?", '')
+    s = s.replace('!', '')
+    s = s.replace(';', '-')
+    s = s.replace('(', '')
+    s = s.replace(')', '')
+    s = s.replace('[', '')
+    s = s.replace(']', '')
+    s = s.replace('（', '')
+    s = s.replace('）', '')
+    s = re.sub("([\(\[（]).*?([\)\]）])", "\g<1>\g<2>", s)
+    return s[0:40]
 
 
 # 获取标注位置
@@ -82,7 +99,8 @@ class Kindle(AbstractConvert):
 
         # 向文件添加标注内容
         for book_name in book_to_sentence_set:
-            f = open('docs/kindle/' + book_name + '.md', 'w', encoding='utf-8')
+            file_path = make_file_name(book_name)
+            f = open('docs/kindle/' + file_path + '.md', 'w', encoding='utf-8')
             f.writelines('# ' + book_name + '\n\n---\n\n')
             sentence_set = book_to_sentence_set.get(book_name)
             for sentence in sentence_set:
