@@ -8,10 +8,11 @@ module.exports = {
     [
       "@vuepress/google-analytics",
       {
-        ga: "UA-119400539-5",
+        ga: "G-S5CVEW25S9",
       },
     ],
     "@vuepress/back-to-top",
+    "@vuepress/nprogress"
   ],
   markdown: {
     // markdown-it-anchor 的选项
