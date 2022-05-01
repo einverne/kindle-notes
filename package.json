@@ -10,6 +10,7 @@
     "docs:build": "vuepress build docs"
   },
   "devDependencies": {
+    "@mr-hope/vuepress-plugin-sitemap": "^1.28.5",
     "@vuepress/plugin-back-to-top": "^1.9.7",
     "@vuepress/plugin-google-analytics": "^1.9.7",
     "@vuepress/plugin-nprogress": "^1.9.7",

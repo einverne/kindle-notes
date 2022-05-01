@@ -12,7 +12,13 @@ module.exports = {
       },
     ],
     "@vuepress/back-to-top",
-    "@vuepress/nprogress"
+    "@vuepress/nprogress",
+		[
+			"@mr-hope/sitemap",
+			{
+				"hostname": "https://clip.einverne.info"
+			}
+		]
   ],
   markdown: {
     // markdown-it-anchor 的选项
