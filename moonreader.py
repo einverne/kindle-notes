@@ -44,4 +44,4 @@ def main(files):
 
 
 if __name__ == '__main__':
-    main('files')
+    main('moonreader')
