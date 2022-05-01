@@ -704,3 +704,39 @@ Your Highlight on Location 3802-3804 Added on Friday, April 22, 2022 1:31:08 PM
 
 ---
 
+> 我提供给这位首席大法官的简短回答，其实是想告诉她，是历史，而非法律原则，教导我们美国人如何逐步接受最高法院的判决。
+
+Your Highlight on Location 446-448 Added on Friday, April 22, 2022 8:58:52 PM
+
+---
+
+> 最高法院还一针见血地谈到了另一个问题：判决的可执行性。
+
+Your Highlight on Location 535-536 Added on Friday, April 22, 2022 9:00:35 PM
+
+---
+
+> 我没有忘记一些人的立场……宪法问题应当由最高法院决定；我也不否认，这类判决对任何案件、任何一方当事人，乃至任何诉讼请求都有约束力，而且，它们在类似情况下，也应受到政府所有其他部门的高度尊重和充分体谅。
+
+Your Highlight on Location 908-910 Added on Friday, April 22, 2022 9:06:55 PM
+
+---
+
+> 同时，所有正直的公民必须承认，如果关系到全体人民利益，而且至关重要的政府政策，必须交由最高法院裁决，那么，即使是只关系到个人行为，发生在当事人之间的普通诉讼，人民也将失去自主权，因为他们实际上已经把自己的政府，交给至高无上的法庭去治理。
+
+Your Highlight on Location 912-915 Added on Friday, April 22, 2022 9:24:13 PM
+
+---
+
+> 重要权利和利益之间，常常存在各类冲突。
+
+Your Highlight on Location 2796-2796 Added on Friday, April 22, 2022 9:42:10 PM
+
+---
+
+> 比例原则特别适合用于解决因重要宪法权利和利益相互发生冲突而产生的问题。
+
+Your Highlight on Location 2847-2847 Added on Friday, April 22, 2022 9:43:10 PM
+
+---
+
